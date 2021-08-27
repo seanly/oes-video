@@ -110,6 +110,8 @@ services:
 
 ```
 
+`file: Dockerfile`
+
 ```dockerfile=
 FROM jenkins/jenkins:lts
 
