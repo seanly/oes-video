@@ -21,6 +21,7 @@ OpenLDAP可以作为统一认证或者作为单点登录的用户管理后端。
 ## 环境准备
 
 在搭建前需要设计目录架构，为方便视频演示，视屏中的目录架构如下图：
+
 ![目录架构图](https://i.imgur.com/P05gh8t.png)
 
 为了方便演示，采用了容器方式运行演示环境，环境配置文件如下：
@@ -67,10 +68,66 @@ ldapsearch -x -b dc=oes,dc=opsbox "(& (uid=ldapadmin) (objectClass=inetOrgPerson
 
 # Jenkins 配置
 
-参见：https://www.bilibili.com/video/BV1fp4y1r7Dd?p=4
 
 ## 准备环境
 
+针对环境搭建社区已经提供了很多种方式
 
+视频参见：https://www.bilibili.com/video/BV1fp4y1r7Dd?p=4
+
+本视频为了简化搭建过程，将制作一个包含ldap插件的镜像，通过容器的方式运行
+
+`file: docker-compose.yml`
+```yaml=
+version: '3'
+services:
+  jenkins-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: seanly/jenkins:lts
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - ./data/oes/data/jenkins:/var/jenkins_home
+    environment:
+      JAVA_OPTS: >-
+        -server
+        -Xmx1g -Xms1g
+        -XX:+UnlockExperimentalVMOptions -XX:+UseContainerSupport
+        -XX:+UseParallelGC -XX:ParallelGCThreads=20 -XX:+UseParallelOldGC
+        -XX:MaxGCPauseMillis=100 -XX:+UseAdaptiveSizePolicy
+        -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+        -Djenkins.install.runSetupWizard=false
+        -Dhudson.model.LoadStatistics.clock=2000
+        -Dhudson.model.ParametersAction.keepUndefinedParameters=true
+        -Dorg.apache.commons.jelly.tags.fmt.timeZone=Asia/Shanghai
+        -Duser.timezone=Asia/Shanghai
+        -Dcom.sun.jndi.ldap.connect.pool.timeout=300000
+        -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true
+
+```
+
+```dockerfile=
+FROM jenkins/jenkins:lts
+
+ENV JENKINS_SLAVE_AGENT_PORT 50000
+
+RUN jenkins-plugin-cli --verbose --plugins ldap
+```
+
+* 构建环境 `docker-compose build`
+* 环境启动命令 `docker-compose up -d`
+* 进入运行的容器 `docker-compose exec jenkins-master bash`
+* 查看容器日志 `docker-compose logs -f jenkins-master`
+* 释放环境 `docker-compose down`
+* 停止容器 `docker-compose stop jenkins-master`
+* 删除容器 `docker-compose rm jenkins-master`
 
 ## 配置测试
+
+配置样例如下图：
+
+![](https://i.imgur.com/F5eQFFC.png)
