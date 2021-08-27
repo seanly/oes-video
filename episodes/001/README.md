@@ -133,3 +133,4 @@ RUN jenkins-plugin-cli --verbose --plugins ldap
 配置样例如下图：
 
 ![](https://i.imgur.com/F5eQFFC.png)
+

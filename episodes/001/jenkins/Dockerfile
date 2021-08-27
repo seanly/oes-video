@@ -1,0 +1,5 @@
+FROM jenkins/jenkins:lts
+
+ENV JENKINS_SLAVE_AGENT_PORT 50000
+
+RUN jenkins-plugin-cli --verbose --plugins ldap
