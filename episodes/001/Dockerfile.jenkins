@@ -1,3 +1,4 @@
+# vim: ft=dockerfile
 FROM jenkins/jenkins:lts
 
 ENV JENKINS_SLAVE_AGENT_PORT 50000

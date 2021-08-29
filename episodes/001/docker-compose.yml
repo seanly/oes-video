@@ -1,14 +1,30 @@
 version: '3'
 services:
+  openldap:
+    image: seanly/openldap:v1.0
+    restart: unless-stopped
+    ports:
+      - 12389:389
+    volumes:
+      - ./data/oes/data/openldap:/data
+    environment:
+      OPENLDAP_SUFFIX: dc=opsbox
+      OPENLDAP_DOMAIN: oes
+      OPENLDAP_ADMIN_PASSWORD: admin123
+      OPENLDAP_CONFIG_PASSWORD: admin123
   jenkins-master:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.jenkins
     image: seanly/jenkins:lts
     restart: unless-stopped
     ports:
       - 8080:8080
       - 50000:50000
+    depends_on:
+      - openldap
+    links:
+      - openldap
     volumes:
       - ./data/oes/data/jenkins:/var/jenkins_home
     environment:
