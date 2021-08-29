@@ -1,22 +1,18 @@
-# Jenkins 对接 OpenLDAP
+# Jenkins 如何对接 OpenLDAP ？
 
 众所周知，在研发软件过程中，需要很多系统协助才能高效的完成软件开发。如果每一个系统都独立管理一套用户系统，对于开发者来说就是一件折腾的事情。所以需要统一认证或者单点登录，统一各个系统之间的账号体系和认证。
 
-OpenLDAP可以作为统一认证或者作为单点登录的用户管理后端。由于OpenLDAP 比较基础，很多系统默认都会支持
+OpenLDAP可以作为统一认证或者作为单点登录的用户管理后端。很多系统默认都会支持 OpenLDAP 服务。
 
-本视频主要演示 Jenkins 如何对接 OpenLDAP 服务，内容包括：
-1. OpenLDAP的基础概念和搭建过程
-1. OpenLDAP如何通过客户端测试查询条件？
-1. Jenkins如何开启LDAP的认证和测试配置？
-
-开始之前可以先下载 https://github.com/seanly/oes-video 代码库地址，本期视频目录 `episodes/001`
+本期视频相关资源存放在 https://github.com/seanly/oes-video/tree/master/episodes/001 
 
 # OpenLDAP
 
 ## 基础概念
 
-非官方文档：https://wiki.shileizcc.com/confluence/display/openldap/OpenLDAP
-官方文档：https://www.openldap.org/
+1. 非官方文档：https://wiki.shileizcc.com/confluence/display/openldap/OpenLDAP
+1. 官方文档：https://www.openldap.org/
+1. LDAP 协议入门 https://zhuanlan.zhihu.com/p/147768058
 
 ## 环境准备
 
@@ -54,7 +50,7 @@ services:
 
 针对docker-compose工具管理环境常用命令有以下几个：
 
-* 环境启动 `docker-compose up -d`
+* 环境启动 `docker-compose up -d openldap`
 * 进入容器 `docker-compose exec openldap bash`
 * 查看日志 `docker-compose logs -f openldap`
 * 释放环境 `docker-compose down`
@@ -138,7 +134,7 @@ RUN jenkins-plugin-cli --verbose --plugins ldap
 针对docker-compose工具管理环境常用命令有以下几个：
 
 * 构建环境 `docker-compose build`
-* 环境启动 `docker-compose up -d`
+* 环境启动 `docker-compose up -d jenkins-master`
 * 进入容器 `docker-compose exec jenkins-master bash`
 * 查看日志 `docker-compose logs -f jenkins-master`
 * 释放环境 `docker-compose down`
