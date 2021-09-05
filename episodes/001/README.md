@@ -64,3 +64,7 @@ ldapsearch -x -b dc=oes,dc=opsbox "(& (uid=ldapadmin) (objectClass=inetOrgPerson
 * 释放环境 `docker-compose down`
 * 停止容器 `docker-compose stop openldap`
 * 删除容器 `docker-compose rm openldap`
+
+# 视频地址
+
+链接: https://pan.baidu.com/s/1ubuAIfTGJhAXzPP7hlcQjA  密码: qcah
